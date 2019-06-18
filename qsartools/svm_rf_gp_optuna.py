@@ -39,14 +39,14 @@ def objectives(trial):
     else:
         classifier_obj = GaussianProcessClassifier()
         trial_uuid += 'gp_'
-    #classifier_obj.fit(train_x, train_y)
+    classifier_obj.fit(train_x, train_y)
     score = cross_val_score(classifier_obj, train_x, train_y, n_jobs=4, cv=5)
     val_accuracy = 1.0-score.mean()
     trial.set_user_attr('val_acc', val_accuracy)
-    classifier_obj.fit(train_x, train_y)
+    #classifier_obj.fit(train_x, train_y)
 
-    y_pred_train = np.rint(classifier_obj.predict(train_x))
-    y_pred_test = np.rint(classifier_obj.predict(test_x))
+    y_pred_train = classifier_obj.predict(train_x)
+    y_pred_test = classifier_obj.predict(test_x)
 
     acc_train = accuracy_score(train_y, y_pred_train)
     acc_test =  accuracy_score(test_y, y_pred_test)
